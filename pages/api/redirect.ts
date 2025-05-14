@@ -55,7 +55,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const accessToken = data.data.access_token;
         const openId = data.data.open_id;
         // 重定向到前端的 dashbord 页面，携带 open_id 和 access_token
-        const redirectTo = `/dashborad?open_id=${openId}&access_token=${accessToken}`;
+        const redirectTo = `/dashboard?open_id=${openId}&access_token=${accessToken}`;
         return res.redirect(302, redirectTo);
     } catch (error) {
         console.error('Error during TikTok redirect handling:', error);
