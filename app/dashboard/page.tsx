@@ -2,12 +2,7 @@
 
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import CardWrapper, { Card } from '@/app/ui/dashboard/cards';
-import RevenueChart from '@/app/ui/dashboard/revenue-chart';
-import LatestInvoices from '@/app/ui/dashboard/latest-invoices';
 import { lusitana } from '@/app/ui/fonts';
-import { Suspense } from 'react';
-import { LatestInvoicesSkeleton, RevenueChartSkeleton, CardsSkeleton } from '@/app/ui/skeletons';
 
 export default function DashboardPage() {
     const router = useRouter();
@@ -20,9 +15,11 @@ export default function DashboardPage() {
     }
 
     const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        if (access_token) {
+        if (router.isReady && access_token) {
+            setLoading(true);
             // 调用后端接口获取用户信息
             fetch(`/api/get-user-info?access_token=${access_token}`)
                 .then((response) => response.json())
@@ -31,9 +28,16 @@ export default function DashboardPage() {
                 })
                 .catch((error) => {
                     console.error('Error fetching user info:', error);
+                })
+                .finally(() => {
+                    setLoading(false);
                 });
         }
-    }, [access_token]);
+    }, [router.isReady, access_token]);
+
+    if (loading) {
+        return <p>Loading...</p>;
+    }
 
     return (
         <main>
@@ -48,21 +52,8 @@ export default function DashboardPage() {
                     <img src={userInfo.avatar_url} alt="Profile" className="w-16 h-16 rounded-full" />
                 </div>
             ) : (
-                <p>Loading user information...</p>
+                <p>Failed to load user information.</p>
             )}
-            {/* <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-                <Suspense fallback={<CardsSkeleton />}>
-                    <CardWrapper />
-                </Suspense>
-            </div>
-            <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-4 lg:grid-cols-8">
-                <Suspense fallback={<RevenueChartSkeleton />}>
-                    <RevenueChart />
-                </Suspense>
-                <Suspense fallback={<LatestInvoicesSkeleton />}>
-                    <LatestInvoices />
-                </Suspense>
-            </div> */}
         </main>
     );
 }
