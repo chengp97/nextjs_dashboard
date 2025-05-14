@@ -41,10 +41,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const data = await response.json();
         console.log('TikTok API Response:', data);
 
-        if (!response.ok || !data.data || !data.data.access_token) {
-            console.error('Failed to fetch access token:', data);
-            return res.status(response.status).json({ error: data });
-        }
+        // if (!response.ok || !data.data || !data.data.access_token) {
+        //     console.error('Failed to fetch access token:', data);
+        //     return res.status(response.status).json({ error: data });
+        // }
 
         const accessToken = data.data.access_token;
         const openId = data.data.open_id;
