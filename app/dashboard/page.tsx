@@ -1,12 +1,16 @@
-'use client';
+'use client'; // 确保整个组件在客户端渲染
 
-import { useRouter } from 'next/router';
+import { usePathname, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { lusitana } from '@/app/ui/fonts';
 
 export default function DashboardPage() {
-    const router = useRouter();
-    const { open_id, access_token } = router.query;
+    const pathname = usePathname();
+    const searchParams = useSearchParams();
+
+    // 从查询参数中获取 open_id 和 access_token
+    const open_id = searchParams.get('open_id');
+    const access_token = searchParams.get('access_token');
 
     interface UserInfo {
         username: string;
@@ -18,7 +22,7 @@ export default function DashboardPage() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        if (router.isReady && access_token) {
+        if (access_token) {
             setLoading(true);
             // 调用后端接口获取用户信息
             fetch(`/api/get-user-info?access_token=${access_token}`)
@@ -33,7 +37,7 @@ export default function DashboardPage() {
                     setLoading(false);
                 });
         }
-    }, [router.isReady, access_token]);
+    }, [access_token]);
 
     if (loading) {
         return <p>Loading...</p>;
