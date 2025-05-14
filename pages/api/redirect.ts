@@ -3,13 +3,11 @@ import { NextApiRequest, NextApiResponse } from 'next';
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const { code, state, error } = req.query;
 
-    // 检查是否有错误返回
     if (error) {
         console.error('TikTok authorization error:', error);
         return res.status(400).json({ error: 'Authorization failed', details: error });
     }
 
-    // 检查是否有授权码
     if (!code) {
         return res.status(400).json({ error: 'Missing authorization code' });
     }
@@ -23,10 +21,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             return res.status(500).json({ error: 'Missing TikTok configuration' });
         }
 
-        // 请求访问令牌的 URL
         const tokenUrl = 'https://open.tiktokapis.com/v2/oauth/token/';
-
-        // 请求体
         const body = new URLSearchParams({
             client_key: clientKey,
             client_secret: clientSecret,
@@ -35,7 +30,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             redirect_uri: redirectUri,
         });
 
-        // 发起 POST 请求以获取访问令牌
         const response = await fetch(tokenUrl, {
             method: 'POST',
             headers: {
@@ -45,18 +39,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         });
 
         const data = await response.json();
+        console.log('TikTok API Response:', data);
 
-        if (!response.ok) {
+        if (!response.ok || !data.data || !data.data.access_token) {
             console.error('Failed to fetch access token:', data);
             return res.status(response.status).json({ error: data });
         }
 
-        // 成功获取访问令牌
         const accessToken = data.data.access_token;
         const openId = data.data.open_id;
-        // 重定向到前端的 dashbord 页面，携带 open_id 和 access_token
+
+        // 重定向到前端的 dashboard 页面，携带 open_id 和 access_token
         const redirectTo = `/dashboard?open_id=${openId}&access_token=${accessToken}`;
-        return res.redirect(302, redirectTo);
+        res.redirect(302, redirectTo);
     } catch (error) {
         console.error('Error during TikTok redirect handling:', error);
         return res.status(500).json({ error: 'Internal server error' });
