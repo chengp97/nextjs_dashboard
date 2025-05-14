@@ -9,7 +9,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     try {
         // 使用访问令牌获取用户信息
-        const userInfoUrl = `https://open.tiktokapis.com/v2/user/info/`;
+        const userInfoUrl = `https://open.tiktokapis.com/v2/user/info/?fields=avatar_url,union_id,open_id,display_name`;
         const userInfoResponse = await fetch(userInfoUrl, {
             method: 'GET',
             headers: {
