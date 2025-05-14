@@ -50,7 +50,7 @@ export default function DashboardPage() {
             ) : (
                 <p>Loading user information...</p>
             )}
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {/* <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
                 <Suspense fallback={<CardsSkeleton />}>
                     <CardWrapper />
                 </Suspense>
@@ -62,7 +62,7 @@ export default function DashboardPage() {
                 <Suspense fallback={<LatestInvoicesSkeleton />}>
                     <LatestInvoices />
                 </Suspense>
-            </div>
+            </div> */}
         </main>
     );
 }
