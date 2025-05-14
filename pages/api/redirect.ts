@@ -46,8 +46,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         //     return res.status(response.status).json({ error: data });
         // }
 
-        const accessToken = data.data.access_token;
-        const openId = data.data.open_id;
+        const accessToken = data.access_token;
+        const openId = data.open_id;
 
         // 重定向到前端的 dashboard 页面，携带 open_id 和 access_token
         const redirectTo = `/dashboard?open_id=${openId}&access_token=${accessToken}`;
