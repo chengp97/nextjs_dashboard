@@ -1,16 +1,15 @@
 'use client'; // 确保整个组件在客户端渲染
 
-import { usePathname, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { lusitana } from '@/app/ui/fonts';
 
 export default function DashboardPage() {
-    const pathname = usePathname();
     const searchParams = useSearchParams();
 
     // 从查询参数中获取 open_id 和 access_token
-    const open_id = searchParams.get('open_id');
-    const access_token = searchParams.get('access_token');
+    const open_id = searchParams?.get('open_id') || ''; // 如果为 null，则使用空字符串
+    const access_token = searchParams?.get('access_token') || '';
 
     interface UserInfo {
         username: string;
