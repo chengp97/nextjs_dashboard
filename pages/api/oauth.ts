@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
     const clientKey = "sbawsbi6ko0re7vr3t"; // 从环境变量中获取 Client Key
-    const redirectUri = "https://nextjs-dashboard-jade-rho-69.vercel.app/redirect"; // 从环境变量中获取 Redirect URI
+    const redirectUri = "https://nextjs-dashboard-jade-rho-69.vercel.app/api/redirect"; // 从环境变量中获取 Redirect URI
 
     if (!clientKey || !redirectUri) {
         return res.status(500).json({ error: 'Missing TikTok configuration' });
